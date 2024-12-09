@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${people.id} != null ? 'Редактирование человека' : 'Добавление нового человека'">Форма</title>
+    <style>
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="${people.id} != null ? 'Редактирование человека' : 'Добавление нового человека'">Форма</h1>
+
+<form th:action="${people.id} != null ? '/people/edit/' + ${people.id} : '/people/new'" method="post">
+    <div>
+        <label for="firstName">Имя:</label>
+        <input type="text" id="firstName" name="firstName" th:value="${people.firstName}" required />
+    </div>
+    <div>
+        <label for="lastName">Фамилия:</label>
+        <input type="text" id="lastName" name="lastName" th:value="${people.lastName}" required />
+    </div>
+    <div>
+        <label for="fatherName">Отчество:</label>
+        <input type="text" id="fatherName" name="fatherName" th:value="${people.fatherName}" required />
+    </div>
+    <div>
+        <label for="diagnosisId">Диагноз ID:</label>
+        <input type="number" id="diagnosisId" name="diagnosisId" th:value="${people.diagnosisId}" required />
+    </div>
+    <div>
+        <label for="wardId">Палата ID:</label>
+        <input type="number" id="wardId" name="wardId" th:value="${people.wardId}" required />
+    </div>
+    <div>
+        <button type="submit" th:text="${people.id} != null ? 'Сохранить изменения' : 'Добавить'"></button>
+        <a href="/people">Отмена</a>
+    </div>
+</form>
+
+<h1>Статистика по палатам</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Максимальное количество</th>
+        <th>Занятые места</th>
+        <th>Название диагноза</th>
+        <th>Процент заполненности</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ward : ${wards_oc}">
+        <td th:text="${ward.get('ward_id')}"></td>
+        <td th:text="${ward.get('ward_name')}"></td>
+        <td th:text="${ward.get('max_count')}"></td>
+        <td th:text="${ward.get('occupied_places')}"></td>
+        <td th:text="${ward.get('diagnosis_name')}"></td>
+        <td th:text="${ward.get('occupancy_percentage')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

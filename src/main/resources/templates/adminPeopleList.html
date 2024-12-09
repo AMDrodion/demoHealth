@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пациентов</title>
+    <style>
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <a th:href="@{/wards}">Список палат</a> |
+    <a th:href="@{/diagnoses}">Список диагнозов</a> |
+    <a th:href="@{/logout}" >Выход</a>
+</div>
+
+<h1>Список людей</h1>
+
+<div>
+    <a th:href="@{/people/new}" sec:authorize="hasRole('ADMIN')">Добавить нового человека</a>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Отчество</th>
+        <th>Диагноз ID</th>
+        <th>Палата ID</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="person : ${people}">
+        <td th:text="${person.id}"></td>
+        <td th:text="${person.firstName}"></td>
+        <td th:text="${person.lastName}"></td>
+        <td th:text="${person.fatherName}"></td>
+        <td th:text="${person.diagnosisId}"></td>
+        <td th:text="${person.wardId}"></td>
+        <td>
+            <div sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/people/edit/{id}(id=${person.id})}">Редактировать</a>
+                <a th:href="@{/people/delete/{id}(id=${person.id})}" onclick="return confirm('Вы действительно хотите удалить этого человека?');">Удалить</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h1>Статистика по палатам</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Максимальное количество</th>
+        <th>Занятые места</th>
+        <th>Название диагноза</th>
+        <th>Процент заполненности</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ward : ${wards_oc}">
+        <td th:text="${ward.get('ward_id')}"></td>
+        <td th:text="${ward.get('ward_name')}"></td>
+        <td th:text="${ward.get('max_count')}"></td>
+        <td th:text="${ward.get('occupied_places')}"></td>
+        <td th:text="${ward.get('diagnosis_name')}"></td>
+        <td th:text="${ward.get('occupancy_percentage')}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

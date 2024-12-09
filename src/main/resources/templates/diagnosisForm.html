@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+  table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+</style>
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${diagnosis.id} != null ? 'Редактирование диагноза' : 'Добавление нового диагноза'">Форма</title>
+</head>
+<body>
+<h1 th:text="${diagnosis.id} != null ? 'Редактирование диагноза' : 'Добавление нового диагноза'">Форма</h1>
+
+<form th:action="@{${diagnosis.id} != null ? '/diagnoses/edit/' + ${diagnosis.id} : '/diagnoses/new'}" method="post">
+  <div>
+    <label for="name">Название:</label>
+    <input type="text" id="name" name="name" th:value="${diagnosis.name}" required>
+  </div>
+  <div>
+    <button type="submit">Сохранить</button>
+    <a href="/diagnoses">Отменить</a>
+  </div>
+</form>
+<h1>Статистика по палатам</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Название</th>
+    <th>Максимальное количество</th>
+    <th>Занятые места</th>
+    <th>Название диагноза</th>
+    <th>Процент заполненности</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="ward : ${wards_oc}">
+    <td th:text="${ward.get('ward_id')}"></td>
+    <td th:text="${ward.get('ward_name')}"></td>
+    <td th:text="${ward.get('max_count')}"></td>
+    <td th:text="${ward.get('occupied_places')}"></td>
+    <td th:text="${ward.get('diagnosis_name')}"></td>
+    <td th:text="${ward.get('occupancy_percentage')}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
